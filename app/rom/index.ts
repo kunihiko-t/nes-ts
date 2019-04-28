@@ -56,12 +56,11 @@ export class Rom {
 
     drawChrData() {
         const canvas = document.createElement('canvas')
-        const pixelRatio = 1
         const ctx = canvas.getContext('2d')
         const start: number = this.getChrRomStart()
         const end: number = this.getChrRomEnd()
         const spriteNum = (end - start) / 16
-        canvas.width = 8 * spriteNum * pixelRatio
+        canvas.width = 8 * spriteNum
         canvas.height = 8
         document.body.appendChild(canvas)
         for (let i = start; i < end; i += 16) {
@@ -75,11 +74,11 @@ export class Rom {
                 for (let k = 0; k < 8; k++) {
                     a[j].push((sprite1 >> k) & 0x01)
                     a[j][k] += (sprite2 >> k) & 0x01
-                    const v =  255 - (a[j][k]) * (85 * 2)
+                    const v = 255 - (a[j][k]) * (85 * 2)
                     let color = `rgb(${v}, ${v}, ${v})`
                     ctx!.beginPath()
                     ctx!.fillStyle = color
-                    ctx!.rect((i - start)/2 + k, j, 1, 1)
+                    ctx!.rect((i - start) / 2 + (7-k), j, 1, 1)
                     ctx!.fill()
                 }
             }
