@@ -1,4 +1,6 @@
 ```
 yarn install
-npx parcel index.html
+yarn dev
 ```
+
+localhost:1234/app/index.html

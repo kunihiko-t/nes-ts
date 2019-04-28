@@ -1,5 +1,5 @@
 module.exports = {
-    extends: ['eslint:recommended', 'plugin:prettier/recommended'],
+    extends: ['eslint:recommended'],
     plugins: ['@typescript-eslint'],
     parser: '@typescript-eslint/parser',
     parserOptions: {
@@ -10,6 +10,7 @@ module.exports = {
         '@typescript-eslint/adjacent-overload-signatures': 'error',
         'no-undef': 'off',
         'no-console': 'off',
+        "semi": ["error", "never"],
     },
     settings: {
         node: {
