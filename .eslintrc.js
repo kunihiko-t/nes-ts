@@ -11,6 +11,7 @@ module.exports = {
         'no-undef': 'off',
         'no-console': 'off',
         "semi": ["error", "never"],
+        "no-unused-vars": ["off"],
     },
     settings: {
         node: {

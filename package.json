@@ -5,7 +5,7 @@
   "author": "Kunihiko Tanaka",
   "license": "MIT",
   "scripts": {
-    "lint": "eslint --ext .js,.ts src --fix",
+    "lint": "eslint --ext .js,.ts app --fix",
     "dev": "parcel app/index.html assets/*",
     "build": "parcel build assets/* app/index.html"
   },
