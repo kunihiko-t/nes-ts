@@ -1,3 +1,5 @@
+import { Sprite } from '../common/types'
+
 export class RomLoader {
     static HEADER_SIZE: number = 16
     static PRG_ROM_UNIT: number = 16 * (1 << 10)
@@ -28,8 +30,8 @@ export class RomLoader {
         this.flag8 = this.getUint8From(8)
         this.flag9 = this.getUint8From(9)
         this.flag10 = this.getUint8From(10)
-        this.chrData =  new DataView(this.data.buffer.slice(this.getChrRomStart(), this.getChrRomEnd()))
-        this.prgData =  new DataView(this.data.buffer.slice(this.getPrgRomStart(), this.getPrgRomEnd()))
+        this.chrData = new DataView(this.data.buffer.slice(this.getChrRomStart(), this.getChrRomEnd()))
+        this.prgData = new DataView(this.data.buffer.slice(this.getPrgRomStart(), this.getPrgRomEnd()))
     }
 
     validateHeader(): boolean {
@@ -66,36 +68,73 @@ export class RomLoader {
         return this.getPrgRomStart() + this.prgRomSize * RomLoader.PRG_ROM_UNIT
     }
 
-
-    drawSprite() {
-        const canvas = document.createElement('canvas')
-        const ctx = canvas.getContext('2d')
+    getSprites(): Array<Sprite> {
         const start: number = this.getChrRomStart()
         const end: number = this.getChrRomEnd()
-        const spriteNum = (end - start) / 16
-        canvas.width = 8 * spriteNum
-        canvas.height = 8
-        document.body.appendChild(canvas)
+        const sprites: Array<Sprite> = []
         for (let i = start; i < end; i += 16) {
             let a = new Array(8)
                 .fill([])
                 .map(() => new Array<number>())
             for (let j = 0; j < 8; j++) {
-                // Use 16byte for 1 sprite
+                // Use 16 bytes for 1 sprite
                 const sprite1 = this.getUint8From(i + j)
                 const sprite2 = this.getUint8From(i + j + 8)
                 for (let k = 0; k < 8; k++) {
                     a[j].push((sprite1 >> k) & 0x01)
                     a[j][k] += (sprite2 >> k) & 0x01
-                    const v = 255 - (a[j][k]) * (85 * 2)
+                }
+            }
+            sprites.push(a)
+        }
+        return sprites
+    }
+
+
+    drawSprite() {
+        const canvas = document.createElement('canvas')
+        const ctx = canvas.getContext('2d')
+        const sprites = this.getSprites()
+        const spriteNum = sprites.length
+        canvas.width = 8 * spriteNum
+        canvas.height = 8
+        document.body.appendChild(canvas)
+
+        sprites.forEach((a, i) => {
+            a.forEach((b, j) => {
+                b.forEach((c, k) => {
+                    const v = 255 - c * (85 * 2)
                     let color = `rgb(${v}, ${v}, ${v})`
                     ctx!.beginPath()
                     ctx!.fillStyle = color
-                    ctx!.rect((i - start) / 2 + (7 - k), j, 1, 1)
+                    ctx!.rect((i*8)+(7-k), j, 1, 1)
                     ctx!.fill()
-                }
-            }
-        }
+                })
+            })
+        })
+
+
+
+        // for (let i = start; i < end; i += 16) {
+        //     let a = new Array(8)
+        //         .fill([])
+        //         .map(() => new Array<number>())
+        //     for (let j = 0; j < 8; j++) {
+        //         // Use 16byte for 1 sprite
+        //         const sprite1 = this.getUint8From(i + j)
+        //         const sprite2 = this.getUint8From(i + j + 8)
+        //         for (let k = 0; k < 8; k++) {
+        //             a[j].push((sprite1 >> k) & 0x01)
+        //             a[j][k] += (sprite2 >> k) & 0x01
+        //             const v = 255 - (a[j][k]) * (85 * 2)
+        //             let color = `rgb(${v}, ${v}, ${v})`
+        //             ctx!.beginPath()
+        //             ctx!.fillStyle = color
+        //             ctx!.rect((i - start) / 2 + (7 - k), j, 1, 1)
+        //             ctx!.fill()
+        //         }
+        //     }
+        // }
     }
 
 }

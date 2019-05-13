@@ -1,17 +1,18 @@
 import { Ram } from '../ram'
 import { Rom } from '../rom'
+import { Ppu } from '../ppu'
 import { Uint8 } from '../common/types'
 
 export class CpuBus {
 
     wram: Ram
     prgRom: Rom
-    chrRom: Rom
+    ppu: Ppu
 
-    constructor(wram: Ram, prgRom: Rom, chrRom: Rom) {
+    constructor(wram: Ram, prgRom: Rom, ppu: Ppu) {
         this.wram = wram
         this.prgRom = prgRom
-        this.chrRom = chrRom
+        this.ppu = ppu
     }
 
     read(offset: number): Uint8 {
