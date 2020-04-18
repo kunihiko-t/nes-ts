@@ -1,6 +1,6 @@
 import { Nes } from './nes'
 
-const romPath: string = '../assets/mario.nes'
+const romPath: string = '../assets/sample1.nes'
 
 fetch(romPath)
     .then(res => {
